@@ -53,7 +53,7 @@ class DistanceFromCenterTest {
 		startTime = System.nanoTime();
 		
 		WorkQueue wq = new WorkQueue();
-		int ct = wq.getThreadCount() + 1;
+		int ct = wq.length() + 1;
 		int dv = height / ct;
 		for (int i = 0; i < ct; i++) {
 			int ys = dv * i;

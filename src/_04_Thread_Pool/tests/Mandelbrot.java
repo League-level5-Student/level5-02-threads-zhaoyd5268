@@ -117,7 +117,7 @@ public class Mandelbrot implements KeyListener {
 	}
 
 	public void updateWindowImageMulti() {
-		int t = workQueue.getThreadCount() + 1;
+		int t = workQueue.length() + 1;
 		int div = HEIGHT / t;
 
 		for (int i = 0; i < t; i++) {

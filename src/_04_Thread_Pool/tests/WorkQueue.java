@@ -12,12 +12,16 @@ public class WorkQueue implements Runnable {
 	public WorkQueue() {
 		int TotalThreadCount = Runtime.getRuntime().availableProcessors() - 1;
 		threads = new Thread[TotalThreadCount];
+		for (int i = 0; i < threads.length; i++) {
+			threads[i] = new Thread(this);
+			threads[i].start();
+		}
 
 	}
 
 	@Override
 	public void run() {
-		while (isRunning) {
+		while (isRunning == true) {
 			if (!performJob()) {
 				synchronized (jobQueue) {
 					try {
@@ -32,10 +36,6 @@ public class WorkQueue implements Runnable {
 	}
 
 	public int length() {
-		for (int i = 0; i < threads.length; i++) {
-			threads[i] = new Thread(this);
-			threads[i].start();
-		}
 		return threads.length;
 	}
 
@@ -63,26 +63,24 @@ public class WorkQueue implements Runnable {
 				j = jobQueue.remove();
 			}
 		}
-			if (j != null) {
-				j.Perform();
-				return true;
-			} else {
-				return false;
-			}
-
-
+		if (j != null) {
+			j.Perform();
+			return true;
+		} else {
+			return false;
+		}
 	}
-	
+
 	public void completeAllJobs() {
 		while (!jobQueue.isEmpty()) {
 			performJob();
 		}
-		
+
 		for (int i = 0; i < threads.length; i++) {
 			if (threads[i].getState() != State.WAITING) {
 				i = -1;
 			}
 		}
-		
+
 	}
 }
